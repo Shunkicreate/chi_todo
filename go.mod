@@ -1,4 +1,4 @@
-module github.com/yourusername/todo-app
+module github.com/Shunkicreate/chi_todo
 
 go 1.22.3
 
