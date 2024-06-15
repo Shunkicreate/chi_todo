@@ -103,4 +103,23 @@ func TestTodoRepository(t *testing.T) {
     if len(todos) != 100 {
         t.Fatalf("Expected 100 todos, got %d", len(todos))
     }
+    // 全てのTodoを削除するためのIDを取得
+    ids := make([]int, len(todos))
+    for i, todo := range todos {
+        ids[i] = todo.ID
+    }
+    // 全てのTodoを削除
+    for _, id := range ids {
+        err := repo.Delete(id)
+        if err != nil {
+            t.Fatalf("Expected no error, got %v", err)
+        }
+    }
+    todos, err = repo.GetAll()
+    if err != nil {
+        t.Fatalf("Expected no error, got %v", err)
+    }
+    if len(todos) != 0 {
+        t.Fatalf("Expected 0 todos, got %d", len(todos))
+    }
 }

@@ -15,7 +15,7 @@ type Dependencies struct {
 
 func InitializeDependencies() *Dependencies {
 	todoRepo := repositories.NewTodoRepository()
-	todoUseCase := usecases.TodoUseCase{TodoRepo: todoRepo}
+	todoUseCase := usecases.NewTodoUseCase(todoRepo)
 	todoController := controllers.TodoController{UseCase: todoUseCase}
 
 	return &Dependencies{

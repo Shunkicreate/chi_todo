@@ -17,6 +17,9 @@ func NewRouter(todoController controllers.TodoController) *chi.Mux {
 		w.Write([]byte("Welcome to chi_todo"))
 	})
 	router.Get("/todos", todoController.GetTodos)
+	router.Post("/todos", todoController.CreateTodo)
+	router.Put("/todos", todoController.UpdateTodo)
+	router.Delete("/todos/{id}", todoController.DeleteTodo)
 
 	return router
 }

@@ -5,27 +5,30 @@ import (
 	"github.com/Shunkicreate/chi_todo/internal/interfaces/gateways"
 )
 
-type TodoUseCase struct {
+type TodoUseCaseImpl struct {
 	TodoRepo gateways.TodoRepository
 }
 
-func (tu *TodoUseCase) GetTodos() ([]entities.Todo, error) {
+func NewTodoUseCase(todoRepo gateways.TodoRepository) TodoUseCase {
+	return &TodoUseCaseImpl{TodoRepo: todoRepo}
+}
+
+func (tu *TodoUseCaseImpl) GetTodos() ([]entities.Todo, error) {
 	return tu.TodoRepo.GetAll()
 }
 
-func (tu *TodoUseCase) CreateTodo(todo entities.Todo) error {
+func (tu *TodoUseCaseImpl) CreateTodo(todo entities.Todo) error {
 	return tu.TodoRepo.Create(todo)
 }
 
-func (tu *TodoUseCase) UpdateTodo(todo entities.Todo) error {
+func (tu *TodoUseCaseImpl) UpdateTodo(todo entities.Todo) error {
 	return tu.TodoRepo.Update(todo)
 }
 
-func (tu *TodoUseCase) DeleteTodo(id int) error {
+func (tu *TodoUseCaseImpl) DeleteTodo(id int) error {
 	return tu.TodoRepo.Delete(id)
 }
 
-func (tu *TodoUseCase) GetTodoByID(id int) (entities.Todo, error) {
+func (tu *TodoUseCaseImpl) GetTodoByID(id int) (entities.Todo, error) {
 	return tu.TodoRepo.GetByID(id)
 }
-
