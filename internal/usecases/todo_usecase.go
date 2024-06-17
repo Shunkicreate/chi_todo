@@ -1,6 +1,8 @@
 package usecases
 
 import (
+	"fmt"
+
 	"github.com/Shunkicreate/chi_todo/internal/entities"
 	"github.com/Shunkicreate/chi_todo/internal/interfaces/gateways"
 )
@@ -18,6 +20,8 @@ func (tu *TodoUseCaseImpl) GetTodos() ([]entities.Todo, error) {
 }
 
 func (tu *TodoUseCaseImpl) CreateTodo(todo entities.Todo) error {
+	fmt.Println("usecase")
+	fmt.Println(todo)
 	return tu.TodoRepo.Create(todo)
 }
 

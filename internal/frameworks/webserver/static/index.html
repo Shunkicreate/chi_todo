@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo CRUD</title>
+</head>
+<body>
+    <h1>Todo CRUD Operations</h1>
+    <form id="createForm">
+        <h2>Create Todo</h2>
+        <label for="createTitle">Title:</label>
+        <input type="text" id="createTitle" name="title" required>
+        <label for="createDescription">Description:</label>
+        <input type="text" id="createDescription" name="description" required>
+        <label for="createLink">Link:</label>
+        <input type="text" id="createLink" name="link" required>
+        <button type="submit">Create</button>
+    </form>
+
+    <form id="updateForm">
+        <h2>Update Todo</h2>
+        <label for="updateId">ID:</label>
+        <input type="number" id="updateId" name="id" required>
+        <label for="updateTitle">Title:</label>
+        <input type="text" id="updateTitle" name="title" required>
+        <label for="updateDescription">Description:</label>
+        <input type="text" id="updateDescription" name="description" required>
+        <label for="updateCompleted">Completed:</label>
+        <input type="checkbox" id="updateCompleted" name="completed">
+        <label for="updateLink">Link:</label>
+        <input type="text" id="updateLink" name="link" required>
+        <button type="submit">Update</button>
+    </form>
+
+    <form id="deleteForm">
+        <h2>Delete Todo</h2>
+        <label for="deleteId">ID:</label>
+        <input type="number" id="deleteId" name="id" required>
+        <button type="submit">Delete</button>
+    </form>
+
+    <h2>Todos</h2>
+    <button id="loadTodos">Load Todos</button>
+    <ul id="todoList"></ul>
+
+    <script>
+        document.getElementById('createForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const title = document.getElementById('createTitle').value;
+            const description = document.getElementById('createDescription').value;
+            const link = document.getElementById('createLink').value;
+            const response = await fetch('/todos', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title, description, completed: false, link })
+            });
+            if (response.ok) {
+                console.log('Todo created!');
+            } else {
+                console.log('Failed to create todo');
+            }
+        });
+
+        document.getElementById('updateForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const id = document.getElementById('updateId').value;
+            const title = document.getElementById('updateTitle').value;
+            const description = document.getElementById('updateDescription').value;
+            const completed = document.getElementById('updateCompleted').checked;
+            const link = document.getElementById('updateLink').value;
+            const response = await fetch(`/todos/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: parseInt(id), title, description, completed, link })
+            });
+            if (response.ok) {
+                console.log('Todo updated!');
+            } else {
+                console.log('Failed to update todo');
+            }
+        });
+
+        document.getElementById('deleteForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const id = document.getElementById('deleteId').value;
+            const response = await fetch(`/todos/${id}`, {
+                method: 'DELETE'
+            });
+            if (response.ok) {
+                console.log('Todo deleted!');
+            } else {
+                console.log('Failed to delete todo');
+            }
+        });
+
+        document.getElementById('loadTodos').addEventListener('click', async () => {
+            const response = await fetch('/todos');
+            const todos = await response.json();
+            const todoList = document.getElementById('todoList');
+            todoList.innerHTML = '';
+            todos.forEach(todo => {
+                const li = document.createElement('li');
+                li.textContent = `ID: ${todo.id}, Title: ${todo.title}, Description: ${todo.description}, Completed: ${todo.completed}, Link: ${todo.link}`;
+                todoList.appendChild(li);
+            });
+        });
+    </script>
+</body>
+</html>

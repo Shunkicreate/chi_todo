@@ -8,18 +8,22 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 )
 
-func NewRouter(todoController controllers.TodoController) *chi.Mux {
-	router := chi.NewRouter()
+func NewRouter(todoController controllers.TodoController) http.Handler {
+    r := chi.NewRouter()
 
-	router.Use(middleware.Logger)
-	router.Use(middleware.Recoverer)
-	router.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Welcome to chi_todo"))
-	})
-	router.Get("/todos", todoController.GetTodos)
-	router.Post("/todos", todoController.CreateTodo)
-	router.Put("/todos", todoController.UpdateTodo)
-	router.Delete("/todos/{id}", todoController.DeleteTodo)
+    // ミドルウェアの設定
+    r.Use(middleware.Logger)
+    r.Use(middleware.Recoverer)
 
-	return router
+    // 静的ファイルの提供
+    r.Handle("/", http.FileServer(http.Dir("./internal/frameworks/webserver/static")))
+
+    // APIルートの設定
+    r.Get("/todos", todoController.GetTodos)
+    // r.Get("/todos/{id}", todoController.GetTodoByID)
+    r.Post("/todos", todoController.CreateTodo)
+    r.Put("/todos/{id}", todoController.UpdateTodo)
+    r.Delete("/todos/{id}", todoController.DeleteTodo)
+
+    return r
 }
