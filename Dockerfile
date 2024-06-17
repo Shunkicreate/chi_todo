@@ -12,7 +12,7 @@ COPY go.mod go.sum ./
 RUN go mod tidy
 
 # Airのインストール
-RUN go install github.com/cosmtrek/air@latest
+RUN go install github.com/air-verse/air@latest
 
 # ソースコードをコピー
 COPY . .
